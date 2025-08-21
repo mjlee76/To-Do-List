@@ -1,15 +1,12 @@
-package com.hello.ToDoList.domain;
+package com.hello.ToDoList.entity;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -24,11 +21,11 @@ public class Member {
 
     //private LocalDateTime updatedAt;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
