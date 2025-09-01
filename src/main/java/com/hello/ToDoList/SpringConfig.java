@@ -1,12 +1,11 @@
 package com.hello.ToDoList;
 
-import com.hello.ToDoList.repository.JdbcTemplateMemberRepository;
-import com.hello.ToDoList.repository.MemberRepository;
+import com.hello.ToDoList.repository.member.JdbcTemplateMemberRepository;
+import com.hello.ToDoList.repository.member.MemberRepository;
 import com.hello.ToDoList.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;

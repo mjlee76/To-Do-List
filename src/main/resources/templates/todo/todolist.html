@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 ToDoList</title>
+    <link rel="stylesheet" th:href="@{/css/todolist.css}">
+</head>
+<body>
+<header>
+    <h2>나의 ToDoList</h2>
+    <!-- 로그아웃 버튼 -->
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="logout-button">로그아웃</button>
+    </form>
+</header>
+
+<div class="container">
+    <div class="todo-card">
+        <div class="todo-header">
+            <h3>할 일 목록</h3>
+            <div class="todo-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalTasks">3</span>
+                    <span class="stat-label">전체</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="completedTasks">0</span>
+                    <span class="stat-label">완료</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="remainingTasks">3</span>
+                    <span class="stat-label">남은 일</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-task-section">
+            <div class="add-task-form" id="addTaskForm">
+                <input
+                        type="text"
+                        class="task-input"
+                        id="taskInput"
+                        placeholder="새 할 일을 입력하세요..."
+                        required
+                >
+                <button type="button" class="add-button">
+                    추가
+                </button>
+            </div>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">전체</button>
+            <button class="filter-btn" data-filter="active">진행 중</button>
+            <button class="filter-btn" data-filter="completed">완료</button>
+        </div>
+
+        <div class="todo-list" id="todoList">
+            <div class="todo-item">
+                <div class="todo-checkbox" onclick="toggleTask(this)"></div>
+                <div class="todo-text">예시 할 일 1</div>
+                <div class="todo-actions">
+                    <button class="action-btn" onclick="deleteTask(this)" title="삭제">🗑️</button>
+                </div>
+            </div>
+            <div class="todo-item">
+                <div class="todo-checkbox" onclick="toggleTask(this)"></div>
+                <div class="todo-text">예시 할 일 2</div>
+                <div class="todo-actions">
+                    <button class="action-btn" onclick="deleteTask(this)" title="삭제">🗑️</button>
+                </div>
+            </div>
+            <div class="todo-item">
+                <div class="todo-checkbox" onclick="toggleTask(this)"></div>
+                <div class="todo-text">예시 할 일 3</div>
+                <div class="todo-actions">
+                    <button class="action-btn" onclick="deleteTask(this)" title="삭제">🗑️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let tasks = [];
+    let currentFilter = 'all';
+
+    // 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        // 기존 할 일들을 tasks 배열에 추가
+        const existingTasks = document.querySelectorAll('.todo-item');
+        existingTasks.forEach((item, index) => {
+            tasks.push({
+                id: index + 1,
+                text: item.querySelector('.todo-text').textContent,
+                completed: false
+            });
+        });
+        updateStats();
+    });
+
+    // 할 일 추가
+    document.querySelector('.add-button').addEventListener('click', function() {
+        const input = document.getElementById('taskInput');
+        const text = input.value.trim();
+
+        if (text) {
+            const task = {
+                id: Date.now(),
+                text: text,
+                completed: false
+            };
+
+            tasks.push(task);
+            addTaskToDOM(task);
+            input.value = '';
+            updateStats();
+
+            // 입력 후 애니메이션
+            input.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                input.style.transform = 'scale(1)';
+            }, 100);
+        }
+    });
+
+    // DOM에 할 일 추가
+    function addTaskToDOM(task) {
+        const todoList = document.getElementById('todoList');
+        const taskElement = document.createElement('div');
+        taskElement.className = 'todo-item' + (task.completed ? ' completed' : '');
+        taskElement.dataset.taskId = task.id;
+
+        taskElement.innerHTML = `
+                <div class="todo-checkbox ${task.completed ? 'checked' : ''}" onclick="toggleTask(this)"></div>
+                <div class="todo-text">${task.text}</div>
+                <div class="todo-actions">
+                    <button class="action-btn" onclick="deleteTask(this)" title="삭제">🗑️</button>
+                </div>
+            `;
+
+        todoList.appendChild(taskElement);
+    }
+
+    // 할 일 완료/미완료 토글
+    function toggleTask(checkbox) {
+        const taskElement = checkbox.closest('.todo-item');
+        const taskId = parseInt(taskElement.dataset.taskId);
+        const task = tasks.find(t => t.id === taskId);
+
+        if (task) {
+            task.completed = !task.completed;
+            checkbox.classList.toggle('checked');
+            taskElement.classList.toggle('completed');
+            updateStats();
+
+            // 완료 효과
+            if (task.completed) {
+                taskElement.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    taskElement.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+    }
+
+    // 할 일 삭제
+    function deleteTask(button) {
+        const taskElement = button.closest('.todo-item');
+        const taskId = parseInt(taskElement.dataset.taskId);
+
+        // 삭제 애니메이션
+        taskElement.style.transform = 'translateX(-100%)';
+        taskElement.style.opacity = '0';
+
+        setTimeout(() => {
+            tasks = tasks.filter(task => task.id !== taskId);
+            taskElement.remove();
+            updateStats();
+            checkEmptyState();
+        }, 300);
+    }
+
+    // 통계 업데이트
+    function updateStats() {
+        const total = tasks.length;
+        const completed = tasks.filter(task => task.completed).length;
+        const remaining = total - completed;
+
+        document.getElementById('totalTasks').textContent = total;
+        document.getElementById('completedTasks').textContent = completed;
+        document.getElementById('remainingTasks').textContent = remaining;
+    }
+
+    // 필터 기능
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            filterTasks();
+        });
+    });
+
+    function filterTasks() {
+        const taskElements = document.querySelectorAll('.todo-item');
+
+        taskElements.forEach(element => {
+            const taskId = parseInt(element.dataset.taskId);
+            const task = tasks.find(t => t.id === taskId);
+
+            if (!task) return;
+
+            let shouldShow = true;
+
+            switch(currentFilter) {
+                case 'active':
+                    shouldShow = !task.completed;
+                    break;
+                case 'completed':
+                    shouldShow = task.completed;
+                    break;
+                case 'all':
+                default:
+                    shouldShow = true;
+                    break;
+            }
+
+            element.style.display = shouldShow ? 'flex' : 'none';
+        });
+
+        checkEmptyState();
+    }
+
+    // 빈 상태 확인
+    function checkEmptyState() {
+        const todoList = document.getElementById('todoList');
+        const visibleTasks = todoList.querySelectorAll('.todo-item[style*="display: flex"], .todo-item:not([style*="display: none"])');
+        const existingEmptyState = todoList.querySelector('.empty-state');
+
+        if (visibleTasks.length === 0 && !existingEmptyState) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.innerHTML = `
+                    <div class="empty-state-icon">📝</div>
+                    <p>할 일이 없습니다</p>
+                    <p>새로운 할 일을 추가해보세요!</p>
+                `;
+            todoList.appendChild(emptyState);
+        } else if (visibleTasks.length > 0 && existingEmptyState) {
+            existingEmptyState.remove();
+        }
+    }
+
+    // Enter 키로 할 일 추가
+    document.getElementById('taskInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.querySelector('.add-button').click();
+        }
+    });
+
+    // 초기 빈 상태 확인
+    setTimeout(checkEmptyState, 100);
+</script>
+</body>
+</html>

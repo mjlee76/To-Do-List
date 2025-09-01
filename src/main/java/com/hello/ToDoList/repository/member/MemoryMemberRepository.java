@@ -1,4 +1,4 @@
-package com.hello.ToDoList.repository;
+package com.hello.ToDoList.repository.member;
 
 import com.hello.ToDoList.entity.Member;
 import org.springframework.stereotype.Repository;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class MemoryMemberRepository implements MemberRepository{
+public class MemoryMemberRepository implements MemberRepository {
 
     private static Map<String, Member> store = new HashMap<>();
     private static long sequence = 0L;

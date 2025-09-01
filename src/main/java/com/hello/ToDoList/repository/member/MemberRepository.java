@@ -1,4 +1,4 @@
-package com.hello.ToDoList.repository;
+package com.hello.ToDoList.repository.member;
 
 import com.hello.ToDoList.entity.Member;
 

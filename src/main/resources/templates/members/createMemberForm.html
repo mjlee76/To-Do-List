@@ -8,7 +8,7 @@
 <body>
 <div class="signup-container">
     <h1>회원가입</h1>
-    <form th:action="@{/members/create}" method="post", th:object="${memberDto}">
+    <form th:action="@{/members/createMemberForm}" method="post" th:object="${memberDto}">
         <div class="form-group">
             <label>아이디</label>
             <input type="text" th:field="*{id}" placeholder="아이디를 입력하세요" required>

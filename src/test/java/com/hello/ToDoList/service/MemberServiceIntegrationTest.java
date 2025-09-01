@@ -3,19 +3,15 @@ package com.hello.ToDoList.service;
 
 import com.hello.ToDoList.dto.MemberDto;
 import com.hello.ToDoList.entity.Member;
-import com.hello.ToDoList.repository.MemberRepository;
+import com.hello.ToDoList.repository.member.MemberRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 //@Transactional

@@ -55,6 +55,11 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
-        return "redirect:/home";
+        return "redirect:/";
+    }
+
+    @GetMapping("/members/login/success")
+    public String loginSuccess() {
+        return "todo/todolist";
     }
 }

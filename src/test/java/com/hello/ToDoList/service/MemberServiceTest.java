@@ -2,10 +2,8 @@ package com.hello.ToDoList.service;
 
 import com.hello.ToDoList.dto.MemberDto;
 import com.hello.ToDoList.entity.Member;
-import com.hello.ToDoList.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
+import com.hello.ToDoList.repository.member.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

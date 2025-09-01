@@ -2,7 +2,7 @@ package com.hello.ToDoList.service;
 
 import com.hello.ToDoList.dto.MemberDto;
 import com.hello.ToDoList.entity.Member;
-import com.hello.ToDoList.repository.MemberRepository;
+import com.hello.ToDoList.repository.member.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

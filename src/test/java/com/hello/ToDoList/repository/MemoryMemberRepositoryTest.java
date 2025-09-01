@@ -1,6 +1,7 @@
 package com.hello.ToDoList.repository;
 
 import com.hello.ToDoList.entity.Member;
+import com.hello.ToDoList.repository.member.MemoryMemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

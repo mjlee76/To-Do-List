@@ -1,7 +1,6 @@
-package com.hello.ToDoList.repository;
+package com.hello.ToDoList.repository.member;
 
 import com.hello.ToDoList.entity.Member;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -11,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcTemplateMemberRepository implements  MemberRepository {
+public class JdbcTemplateMemberRepository implements MemberRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
