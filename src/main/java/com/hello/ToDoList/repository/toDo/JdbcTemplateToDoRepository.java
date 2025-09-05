@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -37,7 +36,7 @@ public class JdbcTemplateToDoRepository implements ToDoRepository {
     }
 
     @Override
-    public List<ToDo> findByMemberAndDate(String memberId, LocalDateTime date) {
+    public List<ToDo> findByMemberAndDate(String memberId, LocalDate date) {
         String sql = """
                 SELECT id, member_id, task, completed, to_do_date, created_at, updated_at
                 FROM todo
@@ -48,7 +47,7 @@ public class JdbcTemplateToDoRepository implements ToDoRepository {
     }
 
     @Override
-    public int countByMemberAndDate(String memberId, LocalDateTime date) {
+    public int countByMemberAndDate(String memberId, LocalDate date) {
         String sql = """
                 SELECT COUNT(*)
                 FROM todo
@@ -88,7 +87,7 @@ public class JdbcTemplateToDoRepository implements ToDoRepository {
                 todo.setMemberId(rs.getString("member_id"));
                 todo.setTask(rs.getString("task"));
                 todo.setCompleted(rs.getBoolean("completed"));
-                todo.setToDoDate(rs.getTimestamp("to_do_date").toLocalDateTime());
+                todo.setToDoDate(rs.getObject("to_do_date",  LocalDate.class));
                 todo.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 if (rs.getTimestamp("updated_at") != null) {
                     todo.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
